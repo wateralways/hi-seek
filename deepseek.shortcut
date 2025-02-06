@@ -8,7 +8,7 @@
         // 自动检测移动设备并跳转安装
         window.onload = function() {
             const isMobile = /iPhone|iPad|iPod|Android/i.test(navigator.userAgent);
-            const shortcutUrl = 'https://cdn.jsdelivr.net/gh/你的用户名/仓库名@main/deepseek.shortcut';
+            const shortcutUrl = 'https://cdn.jsdelivr.net/gh/wateralways/hi-seek@main/deepseek.shortcut';
             
             if(isMobile) {
                 window.location.href = `shortcuts://import-workflow?url=${encodeURIComponent(shortcutUrl)}`;
@@ -18,6 +18,6 @@
 </head>
 <body>
     <h2>自动跳转中...</h2>
-    <p>如果未自动安装，请<a href="shortcuts://import-workflow?url=https://cdn.jsdelivr.net/gh/你的用户名/仓库名@main/deepseek.shortcut">点击手动安装</a></p>
+    <p>如果未自动安装，请<a href="shortcuts://import-workflow?url=https://cdn.jsdelivr.net/gh/wateralways/hi-seek@main/deepseek.shortcut">点击手动安装</a></p>
 </body>
 </html>
