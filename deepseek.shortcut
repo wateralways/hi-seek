@@ -1,23 +1,98 @@
-<!DOCTYPE html>
-<html>
-<head>
-    <meta charset="utf-8">
-    <title>DeepSeek快捷安装</title>
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <script>
-        // 自动检测移动设备并跳转安装
-        window.onload = function() {
-            const isMobile = /iPhone|iPad|iPod|Android/i.test(navigator.userAgent);
-            const shortcutUrl = 'https://cdn.jsdelivr.net/gh/wateralways/hi-seek@main/deepseek.shortcut';
-            
-            if(isMobile) {
-                window.location.href = `shortcuts://import-workflow?url=${encodeURIComponent(shortcutUrl)}`;
-            }
-        }
-    </script>
-</head>
-<body>
-    <h2>自动跳转中...</h2>
-    <p>如果未自动安装，请<a href="shortcuts://import-workflow?url=https://cdn.jsdelivr.net/gh/wateralways/hi-seek@main/deepseek.shortcut">点击手动安装</a></p>
-</body>
-</html>
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+    <key>WFWorkflowActions</key>
+    <array>
+        <!-- API密钥输入 -->
+        <dict>
+            <key>WFWorkflowActionIdentifier</key>
+            <string>is.workflow.actions.askforinput</string>
+            <key>WFWorkflowActionParameters</key>
+            <dict>
+                <key>WFInputType</key>
+                <string>Text</string>
+                <key>WFTextInputPrompt</key>
+                <string>请输入DeepSeek API密钥：</string>
+                <key>WFAskActionPrompt</key>
+                <string>认证所需</string>
+            </dict>
+        </dict>
+        <!-- API调用 -->
+        <dict>
+            <key>WFWorkflowActionIdentifier</key>
+            <string>is.workflow.actions.geturlcontents</string>
+            <key>WFWorkflowActionParameters</key>
+            <dict>
+                <key>WFURL</key>
+                <string>https://api.deepseek.com/v1/chat/completions</string>
+                <key>WFHTTPHeaders</key>
+                <dict>
+                    <key>Authorization</key>
+                    <string>Bearer ${Ask Result}</string>
+                    <key>Content-Type</key>
+                    <string>application/json</string>
+                </dict>
+                <key>WFHTTPMethod</key>
+                <string>POST</string>
+                <key>WFHTTPBodyType</key>
+                <string>JSON</string>
+                <key>WFJSONBody</key>
+                <dict>
+                    <key>model</key>
+                    <string>deepseek-chat</string>
+                    <key>messages</key>
+                    <array>
+                        <dict>
+                            <key>role</key>
+                            <string>user</string>
+                            <key>content</key>
+                            <string>${Provided Input}</string>
+                        </dict>
+                    </array>
+                    <key>temperature</key>
+                    <real>0.7</real>
+                    <key>stream</key>
+                    <true/>
+                </dict>
+            </dict>
+        </dict>
+        <!-- 流式响应处理 -->
+        <dict>
+            <key>WFWorkflowActionIdentifier</key>
+            <string>is.workflow.actions.gettext</string>
+            <key>WFWorkflowActionParameters</key>
+            <dict>
+                <key>WFText</key>
+                <string>${URL内容}</string>
+            </dict>
+        </dict>
+        <dict>
+            <key>WFWorkflowActionIdentifier</key>
+            <string>is.workflow.actions.filter.eventbydict</string>
+            <key>WFWorkflowActionParameters</key>
+            <dict>
+                <key>WFContentItemFilterPattern</key>
+                <string>[data: ^.*?data: (.*)$]</string>
+            </dict>
+        </dict>
+    </array>
+    <key>WFWorkflowClientVersion</key>
+    <string>1180</string>
+    <key>WFWorkflowIcon</key>
+    <dict>
+        <key>WFWorkflowIconGlyphNumber</key>
+        <integer>59431</integer>
+        <key>WFWorkflowIconStartColor</key>
+        <integer>4282601983</integer>
+    </dict>
+    <key>WFWorkflowInputContentItemClasses</key>
+    <array>
+        <string>NSString</string>
+    </array>
+    <key>WFWorkflowTypes</key>
+    <array>
+        <string>WatchKit</string>
+    </array>
+</dict>
+</plist>
